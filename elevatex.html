@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ElevateX — Scaling Brands. Empowering Creators.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080810;
+    --charcoal: #0f0f1a;
+    --card: #13131f;
+    --border: rgba(255,255,255,0.07);
+    --purple: #7c3aed;
+    --purple-light: #a855f7;
+    --blue: #3b82f6;
+    --neon: #8b5cf6;
+    --glow: rgba(124,58,237,0.35);
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --dim: #9898a8;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--purple-light);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(168,85,247,0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.25s ease, height 0.25s ease, border-color 0.2s ease;
+  }
+  body:has(a:hover) .cursor, body:has(button:hover) .cursor { width: 16px; height: 16px; background: #fff; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 52px; height: 52px; border-color: var(--purple-light); }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9000;
+    opacity: 0.4;
+  }
+
+  /* NAVBAR */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 60px;
+    backdrop-filter: blur(20px);
+    background: rgba(8,8,16,0.7);
+    border-bottom: 1px solid var(--border);
+    transition: padding 0.3s;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, var(--purple-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+  }
+  .logo span { color: var(--purple-light); -webkit-text-fill-color: var(--purple-light); }
+  .nav-links {
+    display: flex; gap: 40px; list-style: none;
+    font-size: 0.875rem; font-weight: 400; color: var(--dim);
+  }
+  .nav-links a { color: inherit; text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: #fff; }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: none;
+    transition: opacity 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 20px var(--glow);
+  }
+  .nav-cta:hover { opacity: 0.9; box-shadow: 0 0 32px var(--glow); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    padding: 120px 60px 80px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 50%, rgba(124,58,237,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 30%, rgba(59,130,246,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 100%, rgba(124,58,237,0.08) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 860px;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    color: var(--purple-light);
+    margin-bottom: 32px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--purple-light);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--purple-light);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.8rem, 6vw, 5.2rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+  h1 .grad {
+    background: linear-gradient(135deg, #fff 20%, var(--purple-light) 60%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--dim);
+    max-width: 560px;
+    margin: 0 auto 40px;
+    font-weight: 300;
+    line-height: 1.75;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+  .hero-btns {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple) 0%, #5b21b6 100%);
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: none;
+    box-shadow: 0 0 30px rgba(124,58,237,0.4), 0 4px 20px rgba(0,0,0,0.4);
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 45px rgba(124,58,237,0.6), 0 8px 30px rgba(0,0,0,0.5); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    padding: 14px 32px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: none;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-block;
+    backdrop-filter: blur(4px);
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); transform: translateY(-2px); }
+
+  /* Floating cards in hero */
+  .hero-float {
+    position: absolute;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 0.78rem;
+    backdrop-filter: blur(12px);
+    display: flex; align-items: center; gap: 10px;
+    animation: float 6s ease-in-out infinite;
+    white-space: nowrap;
+  }
+  .float-1 { bottom: 18%; left: 6%; animation-delay: 0s; }
+  .float-2 { top: 28%; right: 5%; animation-delay: -2s; }
+  .float-3 { bottom: 25%; right: 8%; animation-delay: -4s; }
+  .float-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+  .dot-blue { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
+  .dot-purple { background: var(--purple-light); box-shadow: 0 0 8px var(--purple-light); }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+  /* STATS STRIP */
+  .stats-strip {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    padding: 32px 60px;
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff, var(--purple-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+
+  /* SECTIONS */
+  section { padding: 100px 60px; }
+  .section-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple-light);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .section-sub {
+    color: var(--dim);
+    font-size: 1rem;
+    font-weight: 300;
+    max-width: 480px;
+    line-height: 1.7;
+  }
+
+  /* SERVICES */
+  #services { background: var(--charcoal); }
+  .services-header { margin-bottom: 60px; }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .service-card {
+    background: var(--charcoal);
+    padding: 44px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .service-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(124,58,237,0.06) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .service-card:hover { background: #161626; }
+  .service-card:hover::after { opacity: 1; }
+  .service-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    font-size: 1.3rem;
+    position: relative; z-index: 1;
+  }
+  .icon-purple { background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.25); }
+  .icon-blue { background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.25); }
+  .icon-teal { background: rgba(20,184,166,0.15); border: 1px solid rgba(20,184,166,0.25); }
+  .icon-pink { background: rgba(236,72,153,0.15); border: 1px solid rgba(236,72,153,0.25); }
+  .service-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    position: relative; z-index: 1;
+  }
+  .service-card p {
+    font-size: 0.875rem;
+    color: var(--dim);
+    line-height: 1.7;
+    position: relative; z-index: 1;
+  }
+  .service-arrow {
+    margin-top: 24px;
+    font-size: 0.8rem;
+    color: var(--purple-light);
+    display: flex; align-items: center; gap: 6px;
+    position: relative; z-index: 1;
+    transition: gap 0.2s;
+  }
+  .service-card:hover .service-arrow { gap: 10px; }
+
+  /* HOW IT WORKS */
+  #how {
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+  #how::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%);
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .how-header { text-align: center; margin-bottom: 80px; }
+  .how-header .section-sub { margin: 0 auto; }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 32px; left: 16.6%; right: 16.6%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--purple), var(--blue), var(--purple), transparent);
+  }
+  .step {
+    text-align: center;
+    padding: 0 32px;
+    position: relative;
+  }
+  .step-num {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    border: 1px solid rgba(124,58,237,0.4);
+    background: var(--charcoal);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--purple-light);
+    margin: 0 auto 28px;
+    position: relative;
+    box-shadow: 0 0 24px rgba(124,58,237,0.2);
+  }
+  .step-num::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid rgba(124,58,237,0.15);
+  }
+  .step h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .step p { font-size: 0.85rem; color: var(--dim); line-height: 1.7; }
+
+  /* FOR BUSINESSES & CREATORS */
+  #audience {
+    background: var(--charcoal);
+  }
+  .audience-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .audience-card {
+    border-radius: 20px;
+    padding: 56px 48px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .audience-card.biz {
+    background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, var(--card) 50%);
+  }
+  .audience-card.creator {
+    background: linear-gradient(135deg, rgba(124,58,237,0.1) 0%, var(--card) 50%);
+  }
+  .audience-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .audience-card.biz::before { background: linear-gradient(90deg, var(--blue), transparent); }
+  .audience-card.creator::before { background: linear-gradient(90deg, var(--purple), transparent); }
+  .audience-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    font-weight: 500;
+  }
+  .tag-blue { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+  .tag-purple { background: rgba(124,58,237,0.15); color: var(--purple-light); border: 1px solid rgba(124,58,237,0.25); }
+  .audience-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .audience-card > p { color: var(--dim); font-size: 0.9rem; line-height: 1.7; margin-bottom: 32px; }
+  .perks { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .perks li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 0.875rem; color: var(--dim); line-height: 1.5;
+  }
+  .perk-icon {
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    margin-top: 1px;
+  }
+  .perk-blue { background: rgba(59,130,246,0.2); color: #60a5fa; }
+  .perk-purple { background: rgba(124,58,237,0.2); color: var(--purple-light); }
+  .audience-btn {
+    margin-top: 40px;
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.25s;
+    cursor: none;
+  }
+  .btn-blue {
+    background: rgba(59,130,246,0.15);
+    color: #60a5fa;
+    border: 1px solid rgba(59,130,246,0.3);
+  }
+  .btn-blue:hover { background: rgba(59,130,246,0.25); transform: translateY(-2px); }
+  .btn-purple {
+    background: rgba(124,58,237,0.15);
+    color: var(--purple-light);
+    border: 1px solid rgba(124,58,237,0.3);
+  }
+  .btn-purple:hover { background: rgba(124,58,237,0.25); transform: translateY(-2px); }
+
+  /* RESULTS */
+  #results { background: var(--black); }
+  .results-header { margin-bottom: 60px; }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s;
+  }
+  .result-card:hover { transform: translateY(-4px); border-color: rgba(124,58,237,0.3); }
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(124,58,237,0.5), transparent);
+  }
+  .result-brand {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .result-metric {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff, var(--purple-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+    line-height: 1;
+  }
+  .result-desc { font-size: 0.875rem; color: var(--dim); line-height: 1.6; margin-bottom: 20px; }
+  .result-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    background: rgba(124,58,237,0.1);
+    border: 1px solid rgba(124,58,237,0.2);
+    border-radius: 100px;
+    color: var(--purple-light);
+    letter-spacing: 0.05em;
+  }
+
+  /* TESTIMONIALS */
+  #testimonials { background: var(--charcoal); }
+  .testimonials-header { text-align: center; margin-bottom: 60px; }
+  .testimonials-header .section-sub { margin: 0 auto; }
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .testi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: border-color 0.25s;
+  }
+  .testi-card:hover { border-color: rgba(124,58,237,0.2); }
+  .testi-stars { color: #f59e0b; font-size: 0.85rem; margin-bottom: 16px; letter-spacing: 2px; }
+  .testi-quote {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--text);
+    margin-bottom: 24px;
+    font-style: italic;
+    font-weight: 300;
+  }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .av1 { background: linear-gradient(135deg, #7c3aed, #3b82f6); }
+  .av2 { background: linear-gradient(135deg, #ec4899, #f59e0b); }
+  .av3 { background: linear-gradient(135deg, #14b8a6, #3b82f6); }
+  .av4 { background: linear-gradient(135deg, #f59e0b, #ec4899); }
+  .av5 { background: linear-gradient(135deg, #8b5cf6, #06b6d4); }
+  .av6 { background: linear-gradient(135deg, #22c55e, #14b8a6); }
+  .testi-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+  .testi-role { font-size: 0.75rem; color: var(--muted); }
+
+  /* CTA SECTION */
+  #cta {
+    background: var(--black);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #cta::before {
+    content: '';
+    position: absolute;
+    width: 700px; height: 400px;
+    background: radial-gradient(ellipse, rgba(124,58,237,0.15) 0%, transparent 70%);
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .cta-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+  #cta h2 { font-size: clamp(2.4rem, 5vw, 4rem); margin-bottom: 16px; }
+  #cta p { color: var(--dim); margin-bottom: 44px; font-size: 1rem; font-weight: 300; }
+  .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .cta-divider {
+    display: flex; align-items: center; gap: 20px;
+    color: var(--muted); font-size: 0.8rem;
+    margin: 24px 0 0;
+  }
+  .cta-divider::before, .cta-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--charcoal);
+    border-top: 1px solid var(--border);
+    padding: 64px 60px 40px;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  .footer-brand .logo { font-size: 1.2rem; }
+  .footer-brand p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 16px 0 28px;
+    max-width: 260px;
+  }
+  .social-links { display: flex; gap: 12px; }
+  .social-link {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    color: var(--dim);
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .social-link:hover { border-color: rgba(124,58,237,0.4); color: var(--purple-light); background: rgba(124,58,237,0.08); }
+  .footer-col h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-col a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--text); }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-bottom p { font-size: 0.8rem; color: var(--muted); }
+  .footer-bottom span { color: var(--purple-light); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    nav { padding: 20px 32px; }
+    section { padding: 80px 32px; }
+    #hero { padding: 120px 32px 80px; }
+    .stats-strip { padding: 28px 32px; gap: 40px; }
+    .audience-grid { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr 1fr; }
+    .testi-grid { grid-template-columns: 1fr 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .steps::before { display: none; }
+    .steps { grid-template-columns: 1fr; gap: 40px; }
+    .hero-float { display: none; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 64px 20px; }
+    #hero { padding: 100px 20px 60px; }
+    .stats-strip { padding: 24px 20px; gap: 24px; }
+    .results-grid { grid-template-columns: 1fr; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; gap: 32px; }
+    .audience-card { padding: 36px 28px; }
+    footer { padding: 48px 20px 32px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Elevate<span>X</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#how">Process</a></li>
+    <li><a href="#audience">For Businesses</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#testimonials">Testimonials</a></li>
+  </ul>
+  <button class="nav-cta">Get Started</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-float float-1">
+    <span class="float-dot dot-green"></span>
+    <span style="color:#e8e8f0;font-size:0.8rem;">12 active campaigns running</span>
+  </div>
+  <div class="hero-float float-2">
+    <span class="float-dot dot-blue"></span>
+    <span style="color:#e8e8f0;font-size:0.8rem;">Website delivered in 5 days</span>
+  </div>
+  <div class="hero-float float-3">
+    <span class="float-dot dot-purple"></span>
+    <span style="color:#e8e8f0;font-size:0.8rem;">50K+ impressions this month</span>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">Digital Growth Agency</div>
+    <h1>Scaling Brands.<br><span class="grad">Empowering Creators.</span></h1>
+    <p class="hero-sub">ElevateX helps MSMEs grow online with affordable digital marketing and website solutions, while connecting brands with student creators for campaigns that actually convert.</p>
+    <div class="hero-btns">
+      <a href="#audience" class="btn-primary">Get a Website →</a>
+      <a href="#audience" class="btn-ghost">Work With Creators</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat reveal">
+    <div class="stat-num">80+</div>
+    <div class="stat-label">Brands Served</div>
+  </div>
+  <div class="stat reveal reveal-delay-1">
+    <div class="stat-num">200+</div>
+    <div class="stat-label">Creators in Network</div>
+  </div>
+  <div class="stat reveal reveal-delay-2">
+    <div class="stat-num">3.2M</div>
+    <div class="stat-label">Total Impressions</div>
+  </div>
+  <div class="stat reveal reveal-delay-3">
+    <div class="stat-num">5 days</div>
+    <div class="stat-label">Avg. Website Delivery</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-header reveal">
+    <div class="section-label">What We Do</div>
+    <h2>Everything you need<br>to grow online.</h2>
+    <p class="section-sub">From your first website to a full creator campaign — we cover the full digital stack for growing businesses.</p>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-icon icon-purple">🖥️</div>
+      <h3>Website Development</h3>
+      <p>Fast, clean websites built for MSMEs. No bloated agency timelines — your site goes live within the week, optimized for conversion from day one.</p>
+      <div class="service-arrow">Learn more <span>→</span></div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon icon-blue">📱</div>
+      <h3>Social Media Management</h3>
+      <p>Consistent posting, growth-focused strategy, and content that actually performs — handled by people who live on these platforms.</p>
+      <div class="service-arrow">Learn more <span>→</span></div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon icon-teal">🎬</div>
+      <h3>Creator Campaigns</h3>
+      <p>We match your brand with the right student creators and micro-influencers. Authentic content, real audiences, measurable reach.</p>
+      <div class="service-arrow">Learn more <span>→</span></div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon icon-pink">🤝</div>
+      <h3>Brand Collaboration Management</h3>
+      <p>End-to-end management of your creator deals — briefs, approvals, deliverables, and reporting. We handle the ops so you can focus on growth.</p>
+      <div class="service-arrow">Learn more <span>→</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="how-header reveal">
+    <div class="section-label">The Process</div>
+    <h2>Simple process,<br>real results.</h2>
+    <p class="section-sub">We keep things lean. No six-week onboarding calls or 40-slide decks — just fast, focused execution.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <h3>Tell us what you need</h3>
+      <p>Businesses request a website, social strategy, or creator campaign. Creators apply to join the network.</p>
+    </div>
+    <div class="step reveal reveal-delay-1">
+      <div class="step-num">02</div>
+      <h3>We assign the right team</h3>
+      <p>ElevateX matches your project with vetted student talent and creators from our network — filtered by niche, audience, and skill.</p>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-num">03</div>
+      <h3>Execute and measure</h3>
+      <p>Campaigns go live, sites launch, and you get transparent reporting on what's working — no vanity metrics.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOR BUSINESSES & CREATORS -->
+<section id="audience">
+  <div class="audience-grid">
+    <div class="audience-card biz reveal">
+      <div class="audience-tag tag-blue">For Businesses</div>
+      <h3>Grow faster without the agency price tag.</h3>
+      <p>We built ElevateX for MSMEs that need real digital presence but don't have ₹5L to drop on a traditional agency retainer.</p>
+      <ul class="perks">
+        <li>
+          <span class="perk-icon perk-blue">✓</span>
+          <div><strong style="color:#e8e8f0;">Affordable pricing</strong> — plans designed for small business budgets, not enterprise ones.</div>
+        </li>
+        <li>
+          <span class="perk-icon perk-blue">✓</span>
+          <div><strong style="color:#e8e8f0;">5-day website delivery</strong> — clean, functional, conversion-ready. No months of back-and-forth.</div>
+        </li>
+        <li>
+          <span class="perk-icon perk-blue">✓</span>
+          <div><strong style="color:#e8e8f0;">Authentic creator reach</strong> — micro-influencers with real local audiences, not inflated follower counts.</div>
+        </li>
+        <li>
+          <span class="perk-icon perk-blue">✓</span>
+          <div><strong style="color:#e8e8f0;">Single point of contact</strong> — one account manager across all your digital work.</div>
+        </li>
+      </ul>
+      <a href="#cta" class="audience-btn btn-blue">Start a Project →</a>
+    </div>
+    <div class="audience-card creator reveal reveal-delay-1">
+      <div class="audience-tag tag-purple">For Creators</div>
+      <h3>Turn your content skills into a real income stream.</h3>
+      <p>You're already creating — ElevateX connects you to brands actively looking for student creators and pays you fairly for the work.</p>
+      <ul class="perks">
+        <li>
+          <span class="perk-icon perk-purple">✓</span>
+          <div><strong style="color:#e8e8f0;">Paid brand deals</strong> — get matched with campaigns that fit your niche, not spam collabs.</div>
+        </li>
+        <li>
+          <span class="perk-icon perk-purple">✓</span>
+          <div><strong style="color:#e8e8f0;">Freelance client projects</strong> — websites, social content, and more through our business pipeline.</div>
+        </li>
+        <li>
+          <span class="perk-icon perk-purple">✓</span>
+          <div><strong style="color:#e8e8f0;">Portfolio building</strong> — real briefs, real brands, real work that builds your professional track record.</div>
+        </li>
+        <li>
+          <span class="perk-icon perk-purple">✓</span>
+          <div><strong style="color:#e8e8f0;">Community & mentorship</strong> — learn alongside other student creators and get feedback from people doing it.</div>
+        </li>
+      </ul>
+      <a href="#cta" class="audience-btn btn-purple">Join as Creator →</a>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="results-header reveal">
+    <div class="section-label">Case Studies</div>
+    <h2>What happens when<br>brands meet creators.</h2>
+    <p class="section-sub">Early wins across MSMEs we've worked with. No inflated numbers — just what actually happened.</p>
+  </div>
+  <div class="results-grid">
+    <div class="result-card reveal">
+      <div class="result-brand">🏋️ Fitness Brand — Bengaluru</div>
+      <div class="result-metric">3x</div>
+      <div class="result-desc">Instagram reach in 60 days through a structured creator campaign with 8 micro-influencers in the fitness niche.</div>
+      <span class="result-tag">Creator Campaign</span>
+    </div>
+    <div class="result-card reveal reveal-delay-1">
+      <div class="result-brand">☕ Local Café — Pune</div>
+      <div class="result-metric">5 days</div>
+      <div class="result-desc">Website conception to launch, with online menu, booking form, and Google Maps integration — fully live in a week.</div>
+      <span class="result-tag">Website Development</span>
+    </div>
+    <div class="result-card reveal reveal-delay-2">
+      <div class="result-brand">👗 Fashion Label — Delhi</div>
+      <div class="result-metric">50K+</div>
+      <div class="result-desc">Impressions from a 2-week campaign using student creators for Instagram Reels and product styling content.</div>
+      <span class="result-tag">Influencer Campaign</span>
+    </div>
+    <div class="result-card reveal">
+      <div class="result-brand">📚 EdTech Startup — Remote</div>
+      <div class="result-metric">2.4x</div>
+      <div class="result-desc">Increase in landing page conversions after a full redesign and social media content overhaul over 30 days.</div>
+      <span class="result-tag">Web + Social</span>
+    </div>
+    <div class="result-card reveal reveal-delay-1">
+      <div class="result-brand">🍕 Restaurant Chain — Mumbai</div>
+      <div class="result-metric">₹80K</div>
+      <div class="result-desc">Attributable online orders in the first month post-launch driven by creator UGC content and a refreshed website.</div>
+      <span class="result-tag">Full Stack Campaign</span>
+    </div>
+    <div class="result-card reveal reveal-delay-2">
+      <div class="result-brand">🎨 Design Studio — Hyderabad</div>
+      <div class="result-metric">18</div>
+      <div class="result-desc">Qualified inbound leads in 6 weeks from LinkedIn content strategy and portfolio website built by ElevateX.</div>
+      <span class="result-tag">Social Media</span>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="testimonials-header reveal">
+    <div class="section-label">Testimonials</div>
+    <h2>Straight from the people<br>we work with.</h2>
+    <p class="section-sub">Business owners and creators who've worked with ElevateX.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"We needed a website fast and didn't want to spend months briefing an agency. ElevateX delivered in under a week — it looked exactly like what we had in mind."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av1">RS</div>
+        <div>
+          <div class="testi-name">Rahul Sharma</div>
+          <div class="testi-role">Owner, Sharma Fitness Hub, Bengaluru</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-1">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"The creator campaign felt real because it was. They didn't send us bots or mega influencers — just genuine people who actually used our product."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av2">PK</div>
+        <div>
+          <div class="testi-name">Priya Kulkarni</div>
+          <div class="testi-role">Co-Founder, Brewed Co. Café, Pune</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-2">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"As a second-year student, I had no idea how to get brand deals. ElevateX connected me to three campaigns within my first month of joining. Actually paid well too."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av3">AM</div>
+        <div>
+          <div class="testi-name">Aryan Mehta</div>
+          <div class="testi-role">Student Creator, 22K followers, Mumbai</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"We'd burned money on a big agency before. ElevateX was different — responsive, affordable, and they actually understood what a small business needs."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av4">NK</div>
+        <div>
+          <div class="testi-name">Neha Kapoor</div>
+          <div class="testi-role">Founder, Kapoor Fashion House, Delhi</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-1">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"My freelance income went from zero to consistent within two months of joining the network. The briefs are clear and the payments always come on time."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av5">SR</div>
+        <div>
+          <div class="testi-name">Sneha Rao</div>
+          <div class="testi-role">Freelance Designer & Creator, Hyderabad</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-2">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"The team is sharp and doesn't waste your time. They told us what would and wouldn't work, set clear expectations, and then delivered. That's rare."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av6">VT</div>
+        <div>
+          <div class="testi-name">Vikram Tiwari</div>
+          <div class="testi-role">Director, Tiwari EdTech, Remote</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-content">
+    <div class="section-label reveal">Ready when you are</div>
+    <h2 class="reveal">Ready to Elevate<br><span style="background:linear-gradient(135deg,#fff 20%,#a855f7 60%,#3b82f6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Your Brand?</span></h2>
+    <p class="reveal">Whether you're a business that needs to grow or a creator ready to monetize — the first step takes two minutes.</p>
+    <div class="cta-btns reveal">
+      <a href="#" class="btn-primary">Start a Project →</a>
+      <a href="#" class="btn-ghost">Join as Creator</a>
+    </div>
+    <div class="cta-divider reveal">or reach us directly at hello@elevatex.in</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="logo">Elevate<span>X</span></a>
+      <p>A digital growth agency helping MSMEs scale online and student creators monetize their skills. Early-stage, high-execution.</p>
+      <div class="social-links">
+        <a href="#" class="social-link">in</a>
+        <a href="#" class="social-link">ig</a>
+        <a href="#" class="social-link">tw</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Website Development</a></li>
+        <li><a href="#">Social Media Management</a></li>
+        <li><a href="#">Creator Campaigns</a></li>
+        <li><a href="#">Brand Collaborations</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About ElevateX</a></li>
+        <li><a href="#">Our Process</a></li>
+        <li><a href="#">Case Studies</a></li>
+        <li><a href="#">Join as Creator</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">hello@elevatex.in</a></li>
+        <li><a href="#">Start a Project</a></li>
+        <li><a href="#">Creator Network</a></li>
+        <li><a href="#">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 <span>ElevateX</span>. All rights reserved.</p>
+    <p style="font-size:0.8rem;color:var(--muted);">Built for brands. Made for creators.</p>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.padding = window.scrollY > 40 ? '14px 60px' : '22px 60px';
+  });
+
+  // Counter animation
+  function animateCount(el, target, suffix = '') {
+    let start = 0;
+    const duration = 1800;
+    const startTime = performance.now();
+    const isFloat = target.toString().includes('.');
+    function update(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const val = isFloat ? (start + (target - start) * ease).toFixed(1) : Math.round(start + (target - start) * ease);
+      el.textContent = val + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+  const statsObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const nums = e.target.querySelectorAll('.stat-num');
+        nums.forEach(n => {
+          const txt = n.textContent;
+          if (txt.includes('M')) animateCount(n, 3.2, 'M');
+          else if (txt.includes('+')) animateCount(n, parseInt(txt), '+');
+          else if (txt.includes('days')) { n.textContent = '5 days'; }
+        });
+        statsObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  statsObs.observe(document.querySelector('.stats-strip'));
+</script>
+</body>
+</html>
